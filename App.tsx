@@ -140,43 +140,47 @@ const App: React.FC = () => {
       {/* Center: The Machine */}
       <div className="relative bg-slate-800 p-6 rounded-3xl border-4 border-slate-600 shadow-2xl flex flex-col items-center slot-shadow machine-gradient w-full max-w-2xl">
         
-        {/* Machine Header */}
-        <div className="w-full text-center mb-6 bg-black/30 p-2 rounded-xl border border-white/10 relative">
-          
-          {/* Donation Button - Left Side */}
-          <div className="absolute left-3 top-1/2 -translate-y-1/2 z-10">
-             <a
-               href="https://paypal.me/uraroga"
-               target="_blank"
-               rel="noopener noreferrer"
-               className="flex items-center justify-center text-slate-400 hover:text-pink-500 transition-colors p-1"
-               title={t.donate}
-               aria-label={t.donate}
-             >
-               <Heart size={22} className="hover:fill-pink-500/20" />
-             </a>
-          </div>
+        {/* Top Controls Toolbar - High Visibility */}
+        <div className="w-full flex justify-between items-center mb-5 gap-2">
+           {/* Donation Button */}
+           <a
+             href="https://paypal.me/uraroga"
+             target="_blank"
+             rel="noopener noreferrer"
+             className="flex items-center gap-2 text-slate-400 hover:text-pink-400 bg-black/30 hover:bg-black/50 border border-white/5 rounded-full px-3 py-2 transition-all active:scale-95"
+             title={t.donate}
+           >
+             <Heart size={18} className="text-pink-500 fill-pink-500/10" />
+             <span className="text-xs font-bold uppercase hidden sm:inline-block">{t.donate}</span>
+           </a>
 
-          {/* Right Controls: Language & Info */}
-          <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center space-x-2 z-10">
-            <button
-               onClick={toggleLanguage}
-               className="text-slate-400 hover:text-white transition-colors p-1 flex items-center text-xs font-bold font-mono border border-slate-600 rounded px-2 py-1 bg-slate-900/50"
-               title="Switch Language"
-            >
-               <Globe size={14} className="mr-1" />
-               {lang.toUpperCase()}
-            </button>
-            <button 
-               onClick={() => setShowInstructions(true)}
-               className="text-slate-400 hover:text-white transition-colors p-1 cursor-pointer"
-               title={t.howToPlayTooltip}
-               aria-label="Instructions"
-            >
-               <Info size={22} />
-            </button>
-          </div>
-          
+           {/* Right Side: Language & Info */}
+           <div className="flex items-center gap-2 sm:gap-3">
+             {/* Language Toggle */}
+             <button
+                 onClick={toggleLanguage}
+                 className="flex items-center gap-2 text-slate-300 hover:text-white bg-black/30 hover:bg-black/50 border border-white/5 rounded-full px-3 py-2 transition-all active:scale-95"
+                 title="Switch Language"
+              >
+                 <Globe size={16} />
+                 <span className="text-xs font-bold font-mono">{lang.toUpperCase()}</span>
+              </button>
+
+              {/* Info Button - Prominent */}
+              <button 
+                 onClick={() => setShowInstructions(true)}
+                 className="flex items-center gap-2 text-yellow-300 hover:text-white bg-yellow-500/10 hover:bg-yellow-500/20 border border-yellow-500/30 rounded-full px-4 py-2 transition-all active:scale-95 shadow-[0_0_10px_rgba(234,179,8,0.1)] hover:shadow-[0_0_15px_rgba(234,179,8,0.2)]"
+                 title={t.howToPlayTooltip}
+                 aria-label="Instructions"
+              >
+                 <Info size={18} strokeWidth={2.5} />
+                 <span className="text-xs font-bold uppercase tracking-wider">{t.howToPlayTooltip}</span>
+              </button>
+           </div>
+        </div>
+
+        {/* Machine Header Marquee */}
+        <div className="w-full text-center mb-6 bg-black/30 p-2 rounded-xl border border-white/10 relative shadow-inner">
           <h1 className="text-4xl sm:text-5xl font-display text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 via-yellow-500 to-yellow-300 drop-shadow-md tracking-wider">
             777 CLASSIC
           </h1>
