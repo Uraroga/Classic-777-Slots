@@ -21,7 +21,7 @@ export const getRandomSymbol = (): SymbolType => {
 
 /**
  * Core Payout Logic:
- * Cost = 1 Credit.
+ * Cost = 20 Credits.
  * 
  * MAJOR WINS (isWin = true):
  * 3 x 7      -> 250

@@ -13,7 +13,7 @@ export const TRANSLATIONS = {
     win: "Win",
     credits: "CR",
     payTable: "Pay Table",
-    paylineCenter: "1 Credit per Spin • Payline Center",
+    paylineCenter: "20 Credits per Spin • Payline Center",
     
     // Stats
     totalSpins: "Total Spins",
@@ -30,7 +30,7 @@ export const TRANSLATIONS = {
     objectiveTextPart2: "center red payline",
     objectiveTextPart3: " to win.",
     costTitle: "Cost",
-    costText: "1 Credit / Spin",
+    costText: "20 Credits / Spin",
     controlsTitle: "Controls",
     controlsText: "[S] or SPACE",
     payoutsTitle: "Payouts",
@@ -77,7 +77,7 @@ export const TRANSLATIONS = {
     win: "Vincita",
     credits: "CR",
     payTable: "Tabella Pagamenti",
-    paylineCenter: "1 Credito per Giro • Linea Centrale",
+    paylineCenter: "20 Crediti per Giro • Linea Centrale",
     
     // Stats
     totalSpins: "Giri Totali",
@@ -94,7 +94,7 @@ export const TRANSLATIONS = {
     objectiveTextPart2: "linea rossa centrale",
     objectiveTextPart3: " per vincere.",
     costTitle: "Costo",
-    costText: "1 Credito / Giro",
+    costText: "20 Crediti / Giro",
     controlsTitle: "Comandi",
     controlsText: "[S] o SPAZIO",
     payoutsTitle: "Pagamenti",
