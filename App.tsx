@@ -6,7 +6,7 @@ import { getTranslation } from './translations';
 import Reel from './components/Reel';
 import PayTable from './components/PayTable';
 import InstructionsModal from './components/InstructionsModal';
-import { Coins, RotateCw, RefreshCw, Info, Globe, Heart, Trophy, Hash, Percent } from 'lucide-react';
+import { Coins, RotateCw, RefreshCw, Info, Globe, Heart, Trophy, Hash, Scale } from 'lucide-react';
 
 const App: React.FC = () => {
   const [bankroll, setBankroll] = useState(INITIAL_BANKROLL);
@@ -86,13 +86,19 @@ const App: React.FC = () => {
       // Update Statistics
       setTotalSpins(prev => prev + 1);
       
-      if (result.isWin) {
+      if (result.winnings > 0) {
         setBankroll(prev => prev + result.winnings);
         setWinAmount(result.winnings);
-        setTotalWins(prev => prev + 1);
-        // winType from calculateWin is now a key like 'JACKPOT_7'
-        setMessageKey(result.winType || "winner"); 
-        setStatus(GameStatus.WIN);
+        setMessageKey(result.winType || "winner");
+
+        // ONLY increment win counter for actual 3-symbol matches
+        if (result.isWin) {
+          setTotalWins(prev => prev + 1);
+          setStatus(GameStatus.WIN);
+        } else {
+          // This is a "Return" (e.g. 1 or 2 cherries/bells), not a statistical "Win"
+          setStatus(GameStatus.IDLE); 
+        }
       } else {
         setMessageKey("noWin");
         setStatus(GameStatus.LOSS);
@@ -132,14 +138,14 @@ const App: React.FC = () => {
 
   const isGameOver = bankroll < COST_PER_SPIN && status !== GameStatus.SPINNING && status !== GameStatus.STOPPING;
   
-  // Stats Calculation
-  const winPercentage = totalSpins > 0 ? ((totalWins / totalSpins) * 100).toFixed(2) : "0.00";
-
   // Helper to get text from key safely
   const getMessageText = (key: string) => {
     if (!key) return "";
     return (t as any)[key] || key;
   };
+
+  // Calculate percentage for display
+  const creditPercentage = Math.round((bankroll / INITIAL_BANKROLL) * 100);
 
   return (
     <div className="flex flex-col lg:flex-row items-center justify-center gap-8 w-full max-w-6xl px-4 py-8 relative">
@@ -238,11 +244,14 @@ const App: React.FC = () => {
           <div className={`p-3 rounded-lg border flex flex-col items-center justify-center transition-colors duration-300 ${
             status === GameStatus.WIN ? 'bg-green-900/50 border-green-500 text-green-400' :
             status === GameStatus.LOSS ? 'bg-black/50 border-slate-600 text-slate-300' :
+            winAmount > 0 ? 'bg-yellow-900/30 border-yellow-600 text-yellow-200' : // Small Return Style
             'bg-black/50 border-slate-600 text-yellow-400'
           }`}>
              {winAmount > 0 ? (
                <>
-                 <span className="text-xs text-green-400 uppercase tracking-widest mb-1">{t.win}</span>
+                 <span className={`text-xs uppercase tracking-widest mb-1 ${status === GameStatus.WIN ? 'text-green-400' : 'text-yellow-200'}`}>
+                    {status === GameStatus.WIN ? t.win : 'RETURN'}
+                 </span>
                  <span className="text-2xl font-mono font-bold">+{winAmount}</span>
                </>
              ) : (
@@ -264,8 +273,19 @@ const App: React.FC = () => {
                 <span className="text-[10px] text-slate-500 uppercase tracking-tight mt-1">{t.totalWins}</span>
             </div>
             <div className="flex flex-col items-center justify-center">
-                <span className="text-yellow-400 font-mono font-bold text-lg leading-none">{winPercentage}%</span>
-                <span className="text-[10px] text-slate-500 uppercase tracking-tight mt-1">{t.winPercent}</span>
+                {/* Credit Percentage Display (Primary) */}
+                <span className="font-mono font-bold text-lg leading-none text-slate-200">
+                   {creditPercentage}%
+                </span>
+                
+                {/* Numeric Ratio (Secondary) */}
+                <div className="flex items-baseline mt-0.5 opacity-60">
+                   <span className="text-slate-400 text-[10px] font-mono">
+                      {bankroll} / {INITIAL_BANKROLL}
+                   </span>
+                </div>
+                
+                <span className="text-[10px] text-slate-500 uppercase tracking-tight mt-0.5">{t.creditRatio}</span>
             </div>
         </div>
 
@@ -295,7 +315,7 @@ const App: React.FC = () => {
             >
               <span className="drop-shadow-sm flex items-center">
                 {status === GameStatus.SPINNING ? t.spinning : (
-                  <>{t.spin} <span className="text-xs ml-2 opacity-60 font-mono tracking-normal normal-case">(-1 {t.credits})</span></>
+                  <>{t.spin} <span className="text-xs ml-2 opacity-60 font-mono tracking-normal normal-case">(-{COST_PER_SPIN} {t.credits})</span></>
                 )}
               </span>
             </button>
