@@ -46,10 +46,10 @@ const InstructionsModal: React.FC<InstructionsModalProps> = ({ isOpen, onClose, 
           <div className="bg-slate-900/50 p-3 rounded-lg border border-slate-700">
             <h3 className="text-yellow-500 font-bold mb-1 uppercase text-xs tracking-wider">{t.payoutsTitle}</h3>
             <ul className="list-disc list-inside text-slate-300 space-y-1 text-xs">
-              <li>3 x <span className="text-red-500 font-bold">7</span> = 1000 {t.credits}</li>
-              <li>3 x <span className="font-bold">BAR</span> = 200 {t.credits}</li>
-              <li>3 x <span className="text-yellow-500 font-bold">{t.labelBell.toUpperCase()}</span> = 100 {t.credits}</li>
-              <li>3 x <span className="text-red-400 font-bold">{t.labelCherry.toUpperCase()}</span> = 50 {t.credits}</li>
+              <li>3 x <span className="text-red-500 font-bold">7</span> = 250 {t.credits}</li>
+              <li>3 x <span className="font-bold">BAR</span> = 50 {t.credits}</li>
+              <li>3 x <span className="text-yellow-500 font-bold">{t.labelBell.toUpperCase()}</span> = 25 {t.credits}</li>
+              <li>3 x <span className="text-red-400 font-bold">{t.labelCherry.toUpperCase()}</span> = 10 {t.credits}</li>
               <li>{t.anyCherry}</li>
             </ul>
           </div>

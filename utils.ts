@@ -21,21 +21,19 @@ export const getRandomSymbol = (): SymbolType => {
 
 /**
  * Core Payout Logic:
- * Cost = 10 Credits.
+ * Cost = 1 Credit.
  * 
  * MAJOR WINS (isWin = true):
- * 3 x 7      -> 1000
- * 3 x BAR    -> 200
- * 3 x BELL   -> 100
- * 3 x CHERRY -> 50
+ * 3 x 7      -> 250
+ * 3 x BAR    -> 50
+ * 3 x BELL   -> 25
+ * 3 x CHERRY -> 10
  * 
- * SMALL RETURNS (isWin = false, must be < 10):
- * 2 x BELL   -> 5
- * 1 x BELL   -> 2
- * 2 x CHERRY -> 5
- * 1 x CHERRY -> 2
+ * SMALL RETURNS (isWin = false, treated as returns/pushes):
+ * 2 x BELL   -> 4
+ * 2 x CHERRY -> 4
  * 
- * Mixed partials sum up (e.g. 1 Bell + 1 Cherry = 4), as long as it's not a 3-match win.
+ * Single symbols no longer pay.
  */
 export const calculateWin = (reels: [SymbolType, SymbolType, SymbolType]): Omit<SpinResult, 'reels'> => {
   const counts = reels.reduce((acc, symbol) => {
@@ -44,37 +42,20 @@ export const calculateWin = (reels: [SymbolType, SymbolType, SymbolType]): Omit<
   }, {} as Record<SymbolType, number>);
 
   // 1. Check 3 of a kind (Real Wins) - Exclusive
-  if (counts[SymbolType.SEVEN] === 3) return { winnings: 1000, isWin: true, winType: 'JACKPOT_7' };
-  if (counts[SymbolType.BAR] === 3) return { winnings: 200, isWin: true, winType: 'BIG_WIN_BAR' };
-  if (counts[SymbolType.BELL] === 3) return { winnings: 100, isWin: true, winType: 'WIN_BELL' };
-  if (counts[SymbolType.CHERRY] === 3) return { winnings: 50, isWin: true, winType: 'WIN_CHERRY' };
+  if (counts[SymbolType.SEVEN] === 3) return { winnings: 250, isWin: true, winType: 'JACKPOT_7' };
+  if (counts[SymbolType.BAR] === 3) return { winnings: 50, isWin: true, winType: 'BIG_WIN_BAR' };
+  if (counts[SymbolType.BELL] === 3) return { winnings: 25, isWin: true, winType: 'WIN_BELL' };
+  if (counts[SymbolType.CHERRY] === 3) return { winnings: 10, isWin: true, winType: 'WIN_CHERRY' };
 
   // 2. Check Partial Matches (Returns, not Wins)
-  let returnAmount = 0;
-  let returnType = '';
-
-  // Bell Partials
+  // With 3 reels, it is impossible to have multiple "2 of a kind" wins simultaneously.
+  
   if (counts[SymbolType.BELL] === 2) {
-    returnAmount += 5;
-    returnType = 'RETURN_2_BELL';
-  } else if (counts[SymbolType.BELL] === 1) {
-    returnAmount += 2;
-    returnType = 'RETURN_1_BELL';
+    return { winnings: 4, isWin: false, winType: 'RETURN_2_BELL' };
   }
 
-  // Cherry Partials
   if (counts[SymbolType.CHERRY] === 2) {
-    returnAmount += 5;
-    returnType = 'RETURN_2_CHERRY';
-  } else if (counts[SymbolType.CHERRY] === 1) {
-    returnAmount += 2;
-    returnType = 'RETURN_1_CHERRY';
-  }
-
-  if (returnAmount > 0) {
-    // If we have mixed types (e.g. Bell and Cherry), use a generic return message
-    const key = (counts[SymbolType.BELL] && counts[SymbolType.CHERRY]) ? 'RETURN_MIXED' : returnType;
-    return { winnings: returnAmount, isWin: false, winType: key };
+    return { winnings: 4, isWin: false, winType: 'RETURN_2_CHERRY' };
   }
 
   return { winnings: 0, isWin: false };

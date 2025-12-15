@@ -11,14 +11,12 @@ const PayTable: React.FC<PayTableProps> = ({ lang }) => {
   const t = getTranslation(lang);
 
   const rows = [
-    { label: '3 x', symbol: SymbolType.SEVEN, payout: 1000 },
-    { label: '3 x', symbol: SymbolType.BAR, payout: 200 },
-    { label: '3 x', symbol: SymbolType.BELL, payout: 100 },
-    { label: '3 x', symbol: SymbolType.CHERRY, payout: 50 },
-    { label: '2 x', symbol: SymbolType.BELL, payout: 5 },
-    { label: '1 x', symbol: SymbolType.BELL, payout: 2 },
-    { label: '2 x', symbol: SymbolType.CHERRY, payout: 5 },
-    { label: '1 x', symbol: SymbolType.CHERRY, payout: 2 },
+    { label: '3 x', symbol: SymbolType.SEVEN, payout: 250 },
+    { label: '3 x', symbol: SymbolType.BAR, payout: 50 },
+    { label: '3 x', symbol: SymbolType.BELL, payout: 25 },
+    { label: '3 x', symbol: SymbolType.CHERRY, payout: 10 },
+    { label: '2 x', symbol: SymbolType.BELL, payout: 4 },
+    { label: '2 x', symbol: SymbolType.CHERRY, payout: 4 },
   ];
 
   return (
@@ -36,7 +34,7 @@ const PayTable: React.FC<PayTableProps> = ({ lang }) => {
               </div>
             </div>
             <div className="flex items-center">
-              <span className={`font-bold font-mono ${row.payout >= 50 ? 'text-yellow-400 text-lg' : 'text-slate-300 text-base'}`}>{row.payout}</span>
+              <span className={`font-bold font-mono ${row.payout >= 25 ? 'text-yellow-400 text-lg' : 'text-slate-300 text-base'}`}>{row.payout}</span>
               <span className="text-slate-500 ml-1 text-[10px]">{t.credits}</span>
             </div>
           </div>
