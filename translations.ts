@@ -15,6 +15,11 @@ export const TRANSLATIONS = {
     payTable: "Pay Table",
     paylineCenter: "1 Credit per Spin • Payline Center",
     
+    // Stats
+    totalSpins: "Total Spins",
+    totalWins: "Total Wins",
+    winPercent: "Win %",
+
     // Instructions
     instructionsTitle: "How to Play",
     objectiveTitle: "Objective",
@@ -68,6 +73,11 @@ export const TRANSLATIONS = {
     payTable: "Tabella Pagamenti",
     paylineCenter: "1 Credito per Giro • Linea Centrale",
     
+    // Stats
+    totalSpins: "Giri Totali",
+    totalWins: "Vincite Totali",
+    winPercent: "% Vittoria",
+
     // Instructions
     instructionsTitle: "Come Giocare",
     objectiveTitle: "Obiettivo",

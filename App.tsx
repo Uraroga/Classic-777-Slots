@@ -6,13 +6,17 @@ import { getTranslation } from './translations';
 import Reel from './components/Reel';
 import PayTable from './components/PayTable';
 import InstructionsModal from './components/InstructionsModal';
-import { Coins, RotateCw, RefreshCw, Info, Globe, Heart } from 'lucide-react';
+import { Coins, RotateCw, RefreshCw, Info, Globe, Heart, Trophy, Hash, Percent } from 'lucide-react';
 
 const App: React.FC = () => {
   const [bankroll, setBankroll] = useState(INITIAL_BANKROLL);
   const [status, setStatus] = useState<GameStatus>(GameStatus.IDLE);
   const [showInstructions, setShowInstructions] = useState(false);
   const [lang, setLang] = useState<Language>('en');
+  
+  // Statistics State
+  const [totalSpins, setTotalSpins] = useState(0);
+  const [totalWins, setTotalWins] = useState(0);
   
   const t = getTranslation(lang);
 
@@ -79,9 +83,13 @@ const App: React.FC = () => {
       
       const result = calculateWin(reelSymbols);
       
+      // Update Statistics
+      setTotalSpins(prev => prev + 1);
+      
       if (result.isWin) {
         setBankroll(prev => prev + result.winnings);
         setWinAmount(result.winnings);
+        setTotalWins(prev => prev + 1);
         // winType from calculateWin is now a key like 'JACKPOT_7'
         setMessageKey(result.winType || "winner"); 
         setStatus(GameStatus.WIN);
@@ -98,6 +106,8 @@ const App: React.FC = () => {
     setReelSymbols([SymbolType.SEVEN, SymbolType.SEVEN, SymbolType.SEVEN]);
     setMessageKey("ready");
     setWinAmount(0);
+    setTotalSpins(0);
+    setTotalWins(0);
   };
 
   // Keyboard shortcut
@@ -121,6 +131,9 @@ const App: React.FC = () => {
 
 
   const isGameOver = bankroll < COST_PER_SPIN && status !== GameStatus.SPINNING && status !== GameStatus.STOPPING;
+  
+  // Stats Calculation
+  const winPercentage = totalSpins > 0 ? ((totalWins / totalSpins) * 100).toFixed(2) : "0.00";
 
   // Helper to get text from key safely
   const getMessageText = (key: string) => {
@@ -213,7 +226,7 @@ const App: React.FC = () => {
         </div>
 
         {/* Display Panel */}
-        <div className="w-full grid grid-cols-2 gap-4 mb-6">
+        <div className="w-full grid grid-cols-2 gap-4 mb-4">
           <div className="bg-black/50 p-3 rounded-lg border border-slate-600 flex flex-col items-center">
              <span className="text-xs text-slate-400 uppercase tracking-widest mb-1">{t.bankroll}</span>
              <div className="flex items-center text-yellow-400">
@@ -238,6 +251,22 @@ const App: React.FC = () => {
                 </span>
              )}
           </div>
+        </div>
+
+        {/* Statistics Panel - Compact & Vertically Stacked (Content) */}
+        <div className="w-full grid grid-cols-3 gap-2 bg-slate-900/60 p-2 rounded-lg border border-slate-700/50 mb-6">
+            <div className="flex flex-col items-center justify-center">
+                <span className="text-white font-mono font-bold text-lg leading-none">{totalSpins}</span>
+                <span className="text-[10px] text-slate-500 uppercase tracking-tight mt-1">{t.totalSpins}</span>
+            </div>
+            <div className="flex flex-col items-center justify-center border-l border-r border-slate-700/50">
+                <span className={`font-mono font-bold text-lg leading-none ${totalWins > 0 ? 'text-green-400' : 'text-white'}`}>{totalWins}</span>
+                <span className="text-[10px] text-slate-500 uppercase tracking-tight mt-1">{t.totalWins}</span>
+            </div>
+            <div className="flex flex-col items-center justify-center">
+                <span className="text-yellow-400 font-mono font-bold text-lg leading-none">{winPercentage}%</span>
+                <span className="text-[10px] text-slate-500 uppercase tracking-tight mt-1">{t.winPercent}</span>
+            </div>
         </div>
 
         {/* Controls */}
